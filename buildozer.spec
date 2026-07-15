@@ -8,6 +8,7 @@ package.name = tuskanicacademy
 package.domain = org.tuskanic
 
 source.dir = .
+source.main = TUSKANIC_Academy-7.py
 source.include_exts = py,png,jpg,jpg,kv,atlas,ttf,json
 
 version = 1.0.0
@@ -16,7 +17,7 @@ version = 1.0.0
 # کتابخانه‌های مورد نیاز (نسخه‌ها ثابت شدن تا بیلد هر بار یکسان و
 # قابل پیش‌بینی باشه و با آپدیت ناگهانی kivy/kivymd خراب نشه)
 # ------------------------------------------------------------------
-requirements = python3,kivy==2.3.0,kivymd==1.2.0,pyjnius,pillow
+requirements = python3==3.11.6,kivy==2.3.0,kivymd==1.2.0,pyjnius,pillow
 
 orientation = all
 fullscreen = 0
