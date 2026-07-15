@@ -35,7 +35,7 @@ jobs:
       - name: Install buildozer & Cython
         run: |
           pip3 install --upgrade pip
-          pip3 install buildozer cython==0.29.33
+          pip3 install buildozer cython==0.29.36
 
       - name: Cache buildozer & Android SDK/NDK
         uses: actions/cache@v4
@@ -43,9 +43,9 @@ jobs:
           path: |
             .buildozer
             ~/.buildozer
-          key: buildozer-${{ runner.os }}-${{ hashFiles('buildozer.spec') }}
+          key: buildozer-v2-${{ runner.os }}-${{ hashFiles('buildozer.spec') }}
           restore-keys: |
-            buildozer-${{ runner.os }}-
+            buildozer-v2-${{ runner.os }}-
 
       - name: Build APK with Buildozer
         run: |
