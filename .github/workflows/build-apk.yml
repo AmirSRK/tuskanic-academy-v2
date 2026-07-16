@@ -37,12 +37,13 @@ jobs:
           pip3 install --upgrade pip
           pip3 install buildozer cython==0.29.36
 
-      - name: Cache buildozer & Android SDK/NDK
+      - name: Cache buildozer, Android SDK/NDK & debug signing key
         uses: actions/cache@v4
         with:
           path: |
             .buildozer
             ~/.buildozer
+            ~/.android
           key: buildozer-v3-${{ runner.os }}-${{ hashFiles('buildozer.spec') }}
 
       - name: Pin pip version to a known-stable release
