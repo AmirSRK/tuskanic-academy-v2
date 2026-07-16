@@ -8,7 +8,6 @@ package.name = tuskanicacademy
 package.domain = org.tuskanic
 
 source.dir = .
-source.main = TUSKANIC_Academy-7.py
 source.include_exts = py,png,jpg,jpg,kv,atlas,ttf,json
 
 version = 1.0.0
@@ -38,13 +37,17 @@ android.ndk = 25b
 android.archs = arm64-v8a, armeabi-v7a
 
 android.allow_backup = True
-android.presplash_color = #5B2EFF
+
 
 # آیکون اپ - فایل icon.png باید توی ریشه‌ی همین ریپازیتوری باشه
 icon.filename = %(source.dir)s/icon.png
 
 # به‌جای لوگوی پیش‌فرض Kivy، موقع باز شدن اپ همون آیکون خودمون نشون داده بشه
 presplash.filename = %(source.dir)s/icon.png
+
+# رنگ پشت صفحه‌ی لودینگ - دقیقاً هم‌رنگ با پس‌زمینه‌ی خود آیکون
+# (که یکدست بشه و قاب/نوار رنگی اضافه دیده نشه)
+android.presplash_color = #060A15
 
 # استارت سریع‌تر: کدها به‌صورت pyc کامپایل میشن و چیزی اضافه‌بار نمی‌گیریم
 android.release_artifact = apk
