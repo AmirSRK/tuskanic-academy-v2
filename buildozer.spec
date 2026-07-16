@@ -43,6 +43,9 @@ android.presplash_color = #5B2EFF
 # آیکون اپ - فایل icon.png باید توی ریشه‌ی همین ریپازیتوری باشه
 icon.filename = %(source.dir)s/icon.png
 
+# به‌جای لوگوی پیش‌فرض Kivy، موقع باز شدن اپ همون آیکون خودمون نشون داده بشه
+presplash.filename = %(source.dir)s/icon.png
+
 # استارت سریع‌تر: کدها به‌صورت pyc کامپایل میشن و چیزی اضافه‌بار نمی‌گیریم
 android.release_artifact = apk
 
