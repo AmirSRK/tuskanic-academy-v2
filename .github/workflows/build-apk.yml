@@ -45,7 +45,12 @@ jobs:
             ~/.buildozer
           key: buildozer-v3-${{ runner.os }}-${{ hashFiles('buildozer.spec') }}
 
+      - name: Pin pip version to a known-stable release
+        run: echo "pip==24.3.1" > "$HOME/pip-constraints.txt"
+
       - name: Build APK with Buildozer
+        env:
+          PIP_CONSTRAINT: /home/runner/pip-constraints.txt
         run: |
           yes | buildozer android debug
 
