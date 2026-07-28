@@ -18,6 +18,10 @@ from kivymd.app import MDApp
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.list import MDList, OneLineIconListItem, IconLeftWidget
 from kivymd.uix.selectioncontrol import MDSwitch
+from chat_screen import ChatScreen
+from chat_list_screen import ChatListScreen
+from farsi_utils import register_farsi_font
+from kivy.properties import DictProperty
 
 
 # ==================================================
@@ -95,6 +99,8 @@ FloatLayout:
         LanguageScreen:
         ChatSettingsScreen:
         PrivacyScreen:
+        ChatScreen:
+        ChatListScreen:
 
     OfflineBanner:
 
@@ -227,8 +233,8 @@ FloatLayout:
             size_hint: None, None
             size: "40dp", "40dp"
             theme_text_color: "Custom"
-            text_color: "#1F5F4A" if app.current_screen == "support" else "#888888"
-            on_release: app.go_to("support")
+            text_color: "#1F5F4A" if app.current_screen == "chat_list" else "#888888"
+            on_release: app.go_to("chat_list")
 
         MDLabel:
             text: "Messages"
@@ -237,7 +243,7 @@ FloatLayout:
             size_hint_y: None
             height: "16dp"
             theme_text_color: "Custom"
-            text_color: "#1F5F4A" if app.current_screen == "support" else "#888888"
+            text_color: "#1F5F4A" if app.current_screen == "chat_list" else "#888888"
 
     # NOTIFICATIONS
     MDBoxLayout:
@@ -309,6 +315,7 @@ FloatLayout:
         pos_hint: {"center_y": .5}
 
     MDSwitch:
+        id: sw
         size_hint: None, None
         size: "36dp", "48dp"
         pos_hint: {"center_y": .5}
@@ -532,7 +539,7 @@ FloatLayout:
                         elevation: 5
                         ripple_behavior: True
                         padding: "15dp"
-                        on_release: app.go_to("support")
+                        on_release: app.go_to("chat")
                         MDBoxLayout:
                             orientation: "vertical"
                             spacing: "10dp"
@@ -715,7 +722,6 @@ FloatLayout:
                     id: dark_mode_switch
                     pos_hint: {"center_y": .5}
                     on_active: app.toggle_theme(self.active)
-
 
 # ==================================================
 # DASHBOARD
@@ -903,6 +909,7 @@ FloatLayout:
                     text: "Contact Support"
                     pos_hint: {"center_x": .5}
                     md_bg_color: "#0F3D5C"
+                    on_release: app.go_to("chat")
 
         BottomBar:
 
@@ -1173,18 +1180,30 @@ FloatLayout:
                 SettingsSwitchRow:
                     icon: "check-all"
                     text: "Read Receipts"
+                    on_kv_post:
+                        self.ids.sw.active = app.chat_setting["read_receipts"]
+                        self.ids.sw.bind(active=lambda inst, val: app.set_chat_setting("read_receipts", val))
 
                 SettingsSwitchRow:
                     icon: "dots-horizontal"
                     text: "Typing Indicator"
+                    on_kv_post:
+                        self.ids.sw.active = app.chat_setting["typing_indicator"]
+                        self.ids.sw.bind(active=lambda inst, val: app.set_chat_setting("typing_indicator", val))
 
                 SettingsSwitchRow:
                     icon: "download-outline"
                     text: "Auto-Download Media"
+                    on_kv_post:
+                        self.ids.sw.active = app.chat_setting["auto_downloud"]
+                        self.ids.sw.bind(active=lambda inst, val: app.set_chat_setting("auto_downloud", val))
 
                 SettingsSwitchRow:
                     icon: "keyboard-return"
                     text: "Enter to Send"
+                    on_kv_post:
+                        self.ids.sw.active = app.chat_setting["enter_to_send"]
+                        self.ids.sw.bind(active=lambda inst, val: app.set_chat_setting("enter_to_send", val))
 
         Widget:
 
@@ -1272,6 +1291,13 @@ class TuskanicApp(MDApp):
     # before app.root has been created
     current_screen = StringProperty("main")
     selected_language = StringProperty("English")
+    
+    chat_setting = DictProperty({
+        "read_receipts":True,
+        "typing_indicator":True,
+        "auto_downloud":True,
+        "enter_to_send":True
+    })
 
     # flipped by the background connectivity monitor; the OfflineBanner
     # in KV is bound directly to this
@@ -1282,6 +1308,7 @@ class TuskanicApp(MDApp):
     # ----------------------------------------------------------------
 
     def build(self):
+        register_farsi_font()
         self.theme_cls.primary_palette = "Blue"
 
         # Dark mode: use whatever the user picked last time; if they've
@@ -1363,6 +1390,14 @@ class TuskanicApp(MDApp):
 
     def set_language(self, language):
         self.selected_language = language
+
+    def set_chat_setting(self,key,value):
+        # به‌جای تغییر مستقیم یه کلید (که گاهی Kivy درست متوجه‌ش نمی‌شه)،
+        # کل دیکشنری رو با یه نسخه‌ی جدید جایگزین می‌کنیم تا مطمئن باشیم
+        # هر جایی که به chat_setting وصله (چه تو KV، چه تو چت) خبردار بشه
+        updated = dict(self.chat_setting)
+        updated[key] = value
+        self.chat_setting = updated
 
     # ----------------------------------------------------------------
     # THEME: manual toggle (from Settings) + persistence + system sync
